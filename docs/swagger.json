@@ -1,0 +1,12 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API для маркетплейса.",
+        "title": "Go Marketplace Service",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {}
+}
