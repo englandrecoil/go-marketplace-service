@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/englandrecoil/go-marketplace-service/internal/database"
 	"github.com/englandrecoil/go-marketplace-service/internal/handlers"
 	"github.com/joho/godotenv"
 )
@@ -23,8 +24,10 @@ func Init() handlers.ApiConfig {
 	if err != nil {
 		log.Fatalf("couldn't open connection to db: %v", err)
 	}
+	dbQueries := database.New(dbConn)
 
 	return handlers.ApiConfig{
 		Conn: dbConn,
+		DB:   dbQueries,
 	}
 }

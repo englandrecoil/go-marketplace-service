@@ -2,8 +2,10 @@ package dto
 
 import (
 	"log"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type ErrorResponse struct {
@@ -11,9 +13,10 @@ type ErrorResponse struct {
 }
 
 type RegisterResponse struct {
-	Login        string `json:"login"`
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+	ID        uuid.UUID `json:"id"`
+	Login     string    `json:"login"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func ResponseWithError(c *gin.Context, code int, errMsg string, err error) {
