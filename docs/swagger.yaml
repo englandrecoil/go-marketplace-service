@@ -1,15 +1,23 @@
 basePath: /
 definitions:
-  dto.ErrorResponse:
+  dto.AuthResponse:
     properties:
-      error:
+      token:
         type: string
     type: object
-  dto.RegisterRequest:
+  dto.CredentialsRequest:
     properties:
       login:
         type: string
       password:
+        type: string
+    required:
+    - login
+    - password
+    type: object
+  dto.ErrorResponse:
+    properties:
+      error:
         type: string
     type: object
   dto.RegisterResponse:
@@ -30,23 +38,56 @@ info:
   title: Go Marketplace Service
   version: "1.0"
 paths:
+  /api/auth:
+    post:
+      consumes:
+      - application/json
+      description: Аутентифицирует пользователя по заданному логину и паролю и возвращает
+        JWT
+      parameters:
+      - description: Данные пользователя для входа
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CredentialsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешная аутентификация
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Неверный логин или пароль
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Аутентификация пользователя
   /api/reg:
     post:
       consumes:
       - application/json
       description: Создаёт нового пользователя с заданным логином и паролем
       parameters:
-      - description: Данные пользователя
+      - description: Данные пользователя для входа
         in: body
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/dto.RegisterRequest'
+          $ref: '#/definitions/dto.CredentialsRequest'
       produces:
       - application/json
       responses:
         "201":
-          description: Пользователь успешно создан
+          description: Успешная регистрация
           schema:
             $ref: '#/definitions/dto.RegisterResponse'
         "400":
