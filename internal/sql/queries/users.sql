@@ -8,3 +8,7 @@ VALUES (
     $4
 )
 RETURNING *;
+
+-- name: GetUserByLogin :one
+SELECT * FROM users
+WHERE login = $1;

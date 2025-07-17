@@ -25,8 +25,9 @@ const minLoginLength = 5
 const maxLoginLength = 32
 
 type ApiConfig struct {
-	Conn *sql.DB
-	DB   *database.Queries
+	Conn   *sql.DB
+	DB     *database.Queries
+	Secret string
 }
 
 // HandlerRegister godoc
@@ -34,41 +35,41 @@ type ApiConfig struct {
 // @Description Создаёт нового пользователя с заданным логином и паролем
 // @Accept      json
 // @Produce     json
-// @Param       credentials body     dto.RegisterRequest  true "Данные пользователя"
+// @Param       credentials body     dto.RegisterRequest  true "Данные пользователя для входа"
 // @Success     201         {object} dto.RegisterResponse "Пользователь успешно создан"
 // @Failure     400         {object} dto.ErrorResponse    "Неверный формат запроса или логин уже используется"
 // @Failure     500         {object} dto.ErrorResponse    "Внутренняя ошибка сервера"
 // @Router      /api/reg [post]
 func (cfg *ApiConfig) HandlerRegister(c *gin.Context) {
-	credentials := dto.RegisterRequest{}
-	if err := c.Bind(&credentials); err != nil {
+	inputCredentials := dto.CredentialsRequest{}
+	if err := c.Bind(&inputCredentials); err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, "invalid request body format", err)
 		return
 	}
 
 	// validate login
-	if err := validateLogin(credentials.Login); err != nil {
+	if err := validateLogin(inputCredentials.Login); err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 	// validate password
-	if err := passwordvalidator.Validate(credentials.Password, minEntropyBits); err != nil {
+	if err := passwordvalidator.Validate(inputCredentials.Password, minEntropyBits); err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
 
 	// hash password
-	hashedPassword, err := auth.HashPassword(credentials.Password)
+	hashedPassword, err := auth.HashPassword(inputCredentials.Password)
 	if err != nil {
 		dto.ResponseWithError(c, http.StatusInternalServerError, "internal server error", err)
 		return
 	}
 
-	// TODO: store credentials in db
+	// store credentials in db
 	user, err := cfg.DB.CreateUser(
 		c.Request.Context(),
 		database.CreateUserParams{
-			Login:          credentials.Login,
+			Login:          inputCredentials.Login,
 			HashedPassword: hashedPassword,
 			CreatedAt:      time.Now().UTC(),
 			UpdatedAt:      time.Now().UTC(),

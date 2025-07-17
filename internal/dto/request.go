@@ -1,6 +1,6 @@
 package dto
 
-type RegisterRequest struct {
+type CredentialsRequest struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }

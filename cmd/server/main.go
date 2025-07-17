@@ -24,7 +24,7 @@ func main() {
 
 	router := gin.Default()
 	router.POST("/api/reg", apiCfg.HandlerRegister)
-
+	router.POST("/api/auth", apiCfg.HandlerAuth)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(router.Run())

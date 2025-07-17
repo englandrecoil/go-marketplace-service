@@ -19,6 +19,10 @@ type RegisterResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type AuthResponse struct {
+	Token string `json:"token"`
+}
+
 func ResponseWithError(c *gin.Context, code int, errMsg string, err error) {
 	if err != nil {
 		log.Println(err)

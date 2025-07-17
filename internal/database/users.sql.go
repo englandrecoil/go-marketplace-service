@@ -46,3 +46,21 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	)
 	return i, err
 }
+
+const getUserByLogin = `-- name: GetUserByLogin :one
+SELECT id, login, hashed_password, created_at, updated_at FROM users
+WHERE login = $1
+`
+
+func (q *Queries) GetUserByLogin(ctx context.Context, login string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByLogin, login)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Login,
+		&i.HashedPassword,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
