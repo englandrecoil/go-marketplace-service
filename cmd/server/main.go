@@ -6,15 +6,16 @@ import (
 	"github.com/englandrecoil/go-marketplace-service/internal/config"
 	"github.com/gin-gonic/gin"
 
+	_ "github.com/englandrecoil/go-marketplace-service/docs"
+	_ "github.com/lib/pq"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	_ "github.com/lib/pq"
 )
 
 // @Title       Go Marketplace Service
 // @version     1.0
-// @description API для маркетплейса.
+// @description API для маркетплейса
 // @host        localhost:8080
 // @BasePath    /
 func main() {

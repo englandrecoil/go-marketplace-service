@@ -1,9 +1,61 @@
 basePath: /
+definitions:
+  dto.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.RegisterResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      login:
+        type: string
+      updated_at:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  description: API для маркетплейса.
+  description: API для маркетплейса
   title: Go Marketplace Service
   version: "1.0"
-paths: {}
+paths:
+  /api/reg:
+    post:
+      consumes:
+      - application/json
+      description: Создаёт нового пользователя с заданным логином и паролем
+      parameters:
+      - description: Данные пользователя
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Пользователь успешно создан
+          schema:
+            $ref: '#/definitions/dto.RegisterResponse'
+        "400":
+          description: Неверный формат запроса или логин уже используется
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Зарегистрировать нового пользователя
 swagger: "2.0"

@@ -29,6 +29,16 @@ type ApiConfig struct {
 	DB   *database.Queries
 }
 
+// HandlerRegister godoc
+// @Summary     Зарегистрировать нового пользователя
+// @Description Создаёт нового пользователя с заданным логином и паролем
+// @Accept      json
+// @Produce     json
+// @Param       credentials body     dto.RegisterRequest  true "Данные пользователя"
+// @Success     201         {object} dto.RegisterResponse "Пользователь успешно создан"
+// @Failure     400         {object} dto.ErrorResponse    "Неверный формат запроса или логин уже используется"
+// @Failure     500         {object} dto.ErrorResponse    "Внутренняя ошибка сервера"
+// @Router      /api/reg [post]
 func (cfg *ApiConfig) HandlerRegister(c *gin.Context) {
 	credentials := dto.RegisterRequest{}
 	if err := c.Bind(&credentials); err != nil {
