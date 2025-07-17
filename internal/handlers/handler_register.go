@@ -15,6 +15,11 @@ import (
 	passwordvalidator "github.com/wagslane/go-password-validator"
 )
 
+var (
+	ErrInvalidLoginLength = errors.New("invalid length of login")
+	ErrInvalidLoginFormat = errors.New("invalid format of login")
+)
+
 const minEntropyBits = 60
 const minLoginLength = 5
 const maxLoginLength = 32
@@ -83,10 +88,10 @@ func (cfg *ApiConfig) HandlerRegister(c *gin.Context) {
 
 func validateLogin(login string) error {
 	if len(login) < minLoginLength || len(login) > maxLoginLength {
-		return errors.New("invalid length of login")
+		return ErrInvalidLoginLength
 	}
 	if !unicode.IsLetter(rune(login[0])) {
-		return errors.New("invalid format of login")
+		return ErrInvalidLoginFormat
 	}
 	return nil
 }
