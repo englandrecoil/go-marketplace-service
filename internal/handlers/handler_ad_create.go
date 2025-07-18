@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 	"unicode/utf8"
 
 	"github.com/englandrecoil/go-marketplace-service/internal/auth"
+	"github.com/englandrecoil/go-marketplace-service/internal/database"
 	"github.com/englandrecoil/go-marketplace-service/internal/dto"
 	"github.com/gin-gonic/gin"
 )
@@ -28,7 +30,7 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 		dto.ResponseWithError(c, http.StatusUnauthorized, err.Error(), err)
 		return
 	}
-	_, err = auth.ValidateJWT(token, cfg.Secret)
+	userID, err := auth.ValidateJWT(token, cfg.Secret)
 	if err != nil {
 		dto.ResponseWithError(c, http.StatusUnauthorized, "invalid or expired access token", err)
 		return
@@ -59,18 +61,44 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 	}
 
 	// create new record of ad in db
+	ad, err := cfg.DB.CreateAdvertisement(
+		c.Request.Context(),
+		database.CreateAdvertisementParams{
+			Title:        inputAdParams.Title,
+			Description:  inputAdParams.Description,
+			ImageAddress: inputAdParams.ImageAddress,
+			Price:        int32(inputAdParams.Price),
+			CreatedAt:    time.Now().UTC(),
+			UpdatedAt:    time.Now().UTC(),
+			UserID:       userID,
+		},
+	)
+	if err != nil {
+		dto.ResponseWithError(c, http.StatusInternalServerError, "internal server error", err)
+		return
+	}
 
-	// send info to client
+	c.JSON(
+		http.StatusCreated,
+		dto.AdvertisementResponse{
+			ID:           ad.ID.String(),
+			Title:        ad.Title,
+			Description:  ad.Description,
+			ImageAddress: ad.ImageAddress,
+			Price:        int(ad.Price),
+			CreatedAt:    ad.CreatedAt,
+		},
+	)
 }
 
 func validateImage(imageUrl string) error {
-	if _, err := url.ParseRequestURI(imageUrl); err != nil {
+	if _, err := url.Parse(imageUrl); err != nil {
 		return err
 	}
 
 	req, err := http.NewRequest("HEAD", imageUrl, nil)
 	if err != nil {
-		return fmt.Errorf("can't initialize request for server: %s", err)
+		return fmt.Errorf("couldn't get image metadata: %s", err)
 	}
 	client := &http.Client{}
 	res, err := client.Do(req)

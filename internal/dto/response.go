@@ -23,6 +23,15 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
+type AdvertisementResponse struct {
+	ID           string    `json:"id"`
+	Title        string    `json:"title"`
+	Description  string    `json:"description"`
+	ImageAddress string    `json:"image_address"`
+	Price        int       `json:"price"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
 func ResponseWithError(c *gin.Context, code int, errMsg string, err error) {
 	if err != nil {
 		log.Println(err)

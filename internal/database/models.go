@@ -10,6 +10,17 @@ import (
 	"github.com/google/uuid"
 )
 
+type Advertisement struct {
+	ID           uuid.UUID
+	Title        string
+	Description  string
+	ImageAddress string
+	Price        int32
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	UserID       uuid.UUID
+}
+
 type User struct {
 	ID             uuid.UUID
 	Login          string
