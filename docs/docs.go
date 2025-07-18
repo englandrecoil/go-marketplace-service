@@ -16,6 +16,60 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/ads": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Создаёт новое объявление с заданными параметрами",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Создать новое объявление",
+                "parameters": [
+                    {
+                        "description": "Параметры объявления",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AdvertisementRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Успешное создание объявления",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AdvertisementResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный формат запроса",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Невалидный или просроченный токен-доступа",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth": {
             "post": {
                 "description": "Аутентифицирует пользователя по заданному логину и паролю и возвращает JWT",
@@ -25,7 +79,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Аутентификация пользователя",
+                "summary": "Аутентифицировать пользователя",
                 "parameters": [
                     {
                         "description": "Данные пользователя для входа",
@@ -94,7 +148,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Неверный формат запроса или логин уже используется",
+                        "description": "Неверный формат запроса, логин уже используется или пароль слишком слабый",
                         "schema": {
                             "$ref": "#/definitions/dto.ErrorResponse"
                         }
@@ -110,6 +164,52 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.AdvertisementRequest": {
+            "type": "object",
+            "required": [
+                "description",
+                "image_address",
+                "price",
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "image_address": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.AdvertisementResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_address": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.AuthResponse": {
             "type": "object",
             "properties": {

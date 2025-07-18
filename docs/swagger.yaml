@@ -1,5 +1,36 @@
 basePath: /
 definitions:
+  dto.AdvertisementRequest:
+    properties:
+      description:
+        type: string
+      image_address:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
+    required:
+    - description
+    - image_address
+    - price
+    - title
+    type: object
+  dto.AdvertisementResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      image_address:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
+    type: object
   dto.AuthResponse:
     properties:
       token:
@@ -38,6 +69,40 @@ info:
   title: Go Marketplace Service
   version: "1.0"
 paths:
+  /api/ads:
+    post:
+      consumes:
+      - application/json
+      description: Создаёт новое объявление с заданными параметрами
+      parameters:
+      - description: Параметры объявления
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdvertisementRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Успешное создание объявления
+          schema:
+            $ref: '#/definitions/dto.AdvertisementResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Невалидный или просроченный токен-доступа
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Создать новое объявление
   /api/auth:
     post:
       consumes:
@@ -70,7 +135,7 @@ paths:
           description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/dto.ErrorResponse'
-      summary: Аутентификация пользователя
+      summary: Аутентифицировать пользователя
   /api/reg:
     post:
       consumes:
@@ -91,7 +156,8 @@ paths:
           schema:
             $ref: '#/definitions/dto.RegisterResponse'
         "400":
-          description: Неверный формат запроса или логин уже используется
+          description: Неверный формат запроса, логин уже используется или пароль
+            слишком слабый
           schema:
             $ref: '#/definitions/dto.ErrorResponse'
         "500":
