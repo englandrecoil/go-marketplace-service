@@ -24,7 +24,7 @@ const tokenExpirationTime time.Duration = time.Minute * 15
 // @Router      /api/auth [post]
 func (cfg *ApiConfig) HandlerAuth(c *gin.Context) {
 	inputCredentials := dto.CredentialsRequest{}
-	if err := c.Bind(&inputCredentials); err != nil {
+	if err := c.BindJSON(&inputCredentials); err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, "invalid request body format", err)
 		return
 	}
