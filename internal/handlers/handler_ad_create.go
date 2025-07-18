@@ -14,12 +14,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	ErrInvalidLengthTitle       = errors.New("invalid length of title")
+	ErrInvalidLengthDescription = errors.New("invalid length of description")
+	ErrInvalidPrice             = errors.New("incorrect price")
+)
+
 const (
 	minTitleLength = 1
 	maxTitleLength = 50
 	minDescLength  = 10
 	maxDescLength  = 750
-	minPrice       = 1
+	minPrice       = 0
 	maxPrice       = 99999999
 	maxImageSize   = 10 * 1024 * 1024
 )
@@ -43,19 +49,13 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 	}
 
 	// validation part
-	if utf8.RuneCountInString(inputAdParams.Title) < minTitleLength || utf8.RuneCountInString(inputAdParams.Title) > maxTitleLength {
-		dto.ResponseWithError(c, http.StatusBadRequest, "invalid length of title", err)
-		return
-	}
-	if utf8.RuneCountInString(inputAdParams.Description) < minDescLength || utf8.RuneCountInString(inputAdParams.Description) > maxDescLength {
-		dto.ResponseWithError(c, http.StatusBadRequest, "invalid length of description", err)
-		return
-	}
-	if inputAdParams.Price < minPrice || inputAdParams.Price > maxPrice {
-		dto.ResponseWithError(c, http.StatusBadRequest, "incorrect price", err)
-		return
-	}
-	if err = validateImage(inputAdParams.ImageAddress); err != nil {
+	err = validateAdParams(
+		inputAdParams.Title,
+		inputAdParams.Description,
+		inputAdParams.ImageAddress,
+		inputAdParams.Price,
+	)
+	if err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, err.Error(), err)
 		return
 	}
@@ -89,6 +89,22 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 			CreatedAt:    ad.CreatedAt,
 		},
 	)
+}
+
+func validateAdParams(title, description, imageUrl string, price int) error {
+	if utf8.RuneCountInString(title) < minTitleLength || utf8.RuneCountInString(title) > maxTitleLength {
+		return ErrInvalidLengthTitle
+	}
+	if utf8.RuneCountInString(description) < minDescLength || utf8.RuneCountInString(description) > maxDescLength {
+		return ErrInvalidLengthDescription
+	}
+	if price < minPrice || price > maxPrice {
+		return ErrInvalidPrice
+	}
+	if err := validateImage(imageUrl); err != nil {
+		return err
+	}
+	return nil
 }
 
 func validateImage(imageUrl string) error {
