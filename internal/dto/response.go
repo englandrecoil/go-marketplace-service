@@ -23,13 +23,22 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
-type AdvertisementResponse struct {
+type CreateAdsResponse struct {
 	ID           string    `json:"id"`
 	Title        string    `json:"title"`
 	Description  string    `json:"description"`
 	ImageAddress string    `json:"image_address"`
 	Price        int       `json:"price"`
 	CreatedAt    time.Time `json:"created_at"`
+}
+
+type GetAdsResponse struct {
+	Title        string `json:"title"`
+	Description  string `json:"description"`
+	ImageAddress string `json:"image_address"`
+	AuthorLogin  string `json:"author_login"`
+	Price        int    `json:"price"`
+	IsOwner      *bool  `json:"is_owner,omitempty"`
 }
 
 func ResponseWithError(c *gin.Context, code int, errMsg string, err error) {

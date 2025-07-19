@@ -36,8 +36,8 @@ const (
 // @Accept      json
 // @Produce     json
 // @Security    BearerAuth
-// @Param       body body     dto.AdvertisementRequest  true "Параметры объявления"
-// @Success     201  {object} dto.AdvertisementResponse "Успешное создание объявления"
+// @Param       body body     dto.CreateAdsRequest  true "Параметры объявления"
+// @Success     201  {object} dto.CreateAdsResponse "Успешное создание объявления"
 // @Failure     400  {object} dto.ErrorResponse         "Неверный формат запроса"
 // @Failure     401  {object} dto.ErrorResponse         "Невалидный или просроченный токен-доступа"
 // @Failure     500  {object} dto.ErrorResponse         "Внутренняя ошибка сервера"
@@ -54,7 +54,7 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 		return
 	}
 
-	inputAdParams := dto.AdvertisementRequest{}
+	inputAdParams := dto.CreateAdsRequest{}
 	if err := c.BindJSON(&inputAdParams); err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, "invalid request body format", err)
 		return
@@ -92,7 +92,7 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 
 	c.JSON(
 		http.StatusCreated,
-		dto.AdvertisementResponse{
+		dto.CreateAdsResponse{
 			ID:           ad.ID.String(),
 			Title:        ad.Title,
 			Description:  ad.Description,

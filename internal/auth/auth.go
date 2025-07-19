@@ -17,6 +17,12 @@ const (
 	TokenTypeAccess TokenType = "auth-service"
 )
 
+var (
+	ErrMissingAuthorizationHeader       = errors.New("missing authorization header")
+	ErrInvalidAuthorizationHeaderFormat = errors.New("invalid authorization header format")
+	ErrInvalidIssuer                    = errors.New("invalid issuer")
+)
+
 func HashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -52,12 +58,12 @@ func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (str
 func GetBearerToken(c *gin.Context) (string, error) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
-		return "", errors.New("missing authorization header")
+		return "", ErrMissingAuthorizationHeader
 	}
 
 	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || parts[0] != "Bearer" {
-		return "", errors.New("invalid authorization header format")
+		return "", ErrInvalidAuthorizationHeaderFormat
 	}
 	return parts[1], nil
 }
@@ -82,7 +88,7 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
 		return uuid.Nil, err
 	}
 	if issuer != string(TokenTypeAccess) {
-		return uuid.Nil, errors.New("invalid issuer")
+		return uuid.Nil, ErrInvalidIssuer
 	}
 
 	id, err := uuid.Parse(userIDString)

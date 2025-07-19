@@ -1,0 +1,38 @@
+-- +goose Up
+INSERT INTO users (id, login, hashed_password, created_at, updated_at) VALUES
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'user1', 'hashed_password_1', NOW(), NOW()),
+('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'user2', 'hashed_password_2', NOW(), NOW()),
+('cccccccc-cccc-cccc-cccc-cccccccccccc', 'user3', 'hashed_password_3', NOW(), NOW());
+
+INSERT INTO advertisements (id, title, description, image_address, price, created_at, updated_at, user_id) VALUES
+('11111111-1111-1111-1111-111111111111', 'iPhone 13', 'Б/у, отличное состояние', 'https://example.com/iphone.jpg', 85000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('22222222-2222-2222-2222-222222222222', 'MacBook Air', 'Почти новый', 'https://example.com/macbook.jpg', 120000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('33333333-3333-3333-3333-333333333333', 'Gaming Chair', 'Удобное кресло для геймеров', 'https://example.com/chair.jpg', 15000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('44444444-4444-4444-4444-444444444444', 'Electric Scooter', 'Прекрасный электросамокат для города', 'https://example.com/scooter.jpg', 35000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('55555555-5555-5555-5555-555555555555', 'Wireless Headphones', 'Отличный звук и шумоподавление', 'https://example.com/headphones.jpg', 12000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('66666666-6666-6666-6666-666666666666', 'Coffee Maker', 'Кофеварка для настоящих гурманов', 'https://example.com/coffee.jpg', 8000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('77777777-7777-7777-7777-777777777777', 'Mountain Bike', 'Надежный велосипед для походов', 'https://example.com/bike.jpg', 45000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('88888888-8888-8888-8888-888888888888', 'Smart Watch', 'Умные часы с множеством функций', 'https://example.com/watch.jpg', 23000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('99999999-9999-9999-9999-999999999999', 'Yoga Mat', 'Коврик для йоги, новый', 'https://example.com/yoga.jpg', 3000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('aaaaaaaa-1111-1111-1111-aaaaaaaaaaaa', 'Backpack', 'Прочный рюкзак для путешествий', 'https://example.com/backpack.jpg', 7000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('bbbbbbbb-2222-2222-2222-bbbbbbbbbbbb', 'Bluetooth Speaker', 'Портативная колонка с мощным звуком', 'https://example.com/speaker.jpg', 5500, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('cccccccc-3333-3333-3333-cccccccccccc', 'Desk Lamp', 'Настольная лампа с регулировкой яркости', 'https://example.com/lamp.jpg', 2000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('dddddddd-4444-4444-4444-dddddddddddd', 'Gaming Mouse', 'Игровая мышь с RGB подсветкой', 'https://example.com/mouse.jpg', 3500, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('eeeeeeee-5555-5555-5555-eeeeeeeeeeee', 'Mechanical Keyboard', 'Клавиатура с тактильной отдачей', 'https://example.com/keyboard.jpg', 6500, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('ffffffff-6666-6666-6666-ffffffffffff', 'Monitor 27"', '27-дюймовый монитор с высокой четкостью', 'https://example.com/monitor.jpg', 20000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('11111111-7777-7777-7777-111111111111', 'Smartphone Case', 'Противоударный чехол для смартфона', 'https://example.com/case.jpg', 1200, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('22222222-8888-8888-8888-222222222222', 'Wireless Charger', 'Беспроводное зарядное устройство', 'https://example.com/charger.jpg', 2500, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('33333333-9999-9999-9999-333333333333', 'Tablet', 'Планшет с большим экраном', 'https://example.com/tablet.jpg', 32000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('44444444-aaaa-aaaa-aaaa-444444444444', 'Digital Camera', 'Цифровая камера с высоким разрешением', 'https://example.com/camera.jpg', 28000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),('55555555-bbbb-bbbb-bbbb-555555555555', 'Printer', 'Струйный принтер для дома', 'https://example.com/printer.jpg', 12000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('66666666-cccc-cccc-cccc-666666666666', 'Office Chair', 'Комфортное кресло для работы', 'https://example.com/officechair.jpg', 11000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('77777777-dddd-dddd-dddd-777777777777', 'Electric Kettle', 'Быстрый электрический чайник', 'https://example.com/kettle.jpg', 3000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('88888888-eeee-eeee-eeee-888888888888', 'Fitness Tracker', 'Трекер активности с пульсометром', 'https://example.com/fitnesstracker.jpg', 8000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('99999999-ffff-ffff-ffff-999999999999', 'Desk Organizer', 'Органайзер для рабочего стола', 'https://example.com/organizer.jpg', 1500, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('aaaaaaaa-0000-0000-0000-aaaaaaaa0000', 'Water Bottle', 'Спортивная бутылка для воды', 'https://example.com/waterbottle.jpg', 1200, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('bbbbbbbb-1111-1111-1111-bbbbbbbb1111', 'LED Strip', 'Светодиодная лента для подсветки', 'https://example.com/ledstrip.jpg', 900, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('cccccccc-2222-2222-2222-cccccccc2222', 'Bluetooth Earbuds', 'Беспроводные наушники', 'https://example.com/earbuds.jpg', 7000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('dddddddd-3333-3333-3333-dddddddd3333', 'Smart Thermostat', 'Умный термостат для дома', 'https://example.com/thermostat.jpg', 15000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('eeeeeeee-4444-4444-4444-eeeeeeee4444', 'VR Headset', 'Очки виртуальной реальности', 'https://example.com/vrheadset.jpg', 35000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'),
+('ffffffff-5555-5555-5555-ffffffff5555', 'Electric Guitar', 'Электрогитара для музыкантов', 'https://example.com/guitar.jpg', 22000, NOW(), NOW(), 'cccccccc-cccc-cccc-cccc-cccccccccccc'),
+('11111111-6666-6666-6666-111111116666', 'Cookware Set', 'Набор кухонной посуды', 'https://example.com/cookware.jpg', 9000, NOW(), NOW(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+('22222222-7777-7777-7777-222222227777', 'Electric Drill', 'Электроинструмент для дома', 'https://example.com/drill.jpg', 7000, NOW(), NOW(), 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');

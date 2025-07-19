@@ -27,6 +27,8 @@ func main() {
 	router.POST("/api/auth", apiCfg.HandlerAuth)
 	router.POST("/api/ads", apiCfg.HandlerCreateAd)
 
+	router.GET("/api/ads", apiCfg.HandlerGetAds)
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(router.Run())

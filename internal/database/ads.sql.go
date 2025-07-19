@@ -60,3 +60,80 @@ func (q *Queries) CreateAdvertisement(ctx context.Context, arg CreateAdvertiseme
 	)
 	return i, err
 }
+
+const getAdvertisements = `-- name: GetAdvertisements :many
+SELECT 
+  ads.title, 
+  ads.description, 
+  ads.image_address, 
+  ads.price, 
+  ads.user_id, 
+  users.login AS author_login
+FROM advertisements AS ads
+JOIN users ON users.id = ads.user_id
+WHERE 
+  ($3::int IS NULL OR ads.price >= $3)
+  AND ($4::int IS NULL OR ads.price <= $4)
+ORDER BY
+  CASE WHEN $5 = 'price'      AND $6 = 'asc'  THEN ads.price     END ASC,
+  CASE WHEN $5 = 'price'      AND $6 = 'desc' THEN ads.price     END DESC,
+  CASE WHEN $5 = 'created_at' AND $6 = 'asc'  THEN ads.created_at END ASC,
+  CASE WHEN $5 = 'created_at' AND $6 = 'desc' THEN ads.created_at END DESC,
+  ads.created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type GetAdvertisementsParams struct {
+	Limit    int32
+	Offset   int32
+	MinPrice int32
+	MaxPrice int32
+	OrderBy  interface{}
+	OrderDir interface{}
+}
+
+type GetAdvertisementsRow struct {
+	Title        string
+	Description  string
+	ImageAddress string
+	Price        int32
+	UserID       uuid.UUID
+	AuthorLogin  string
+}
+
+func (q *Queries) GetAdvertisements(ctx context.Context, arg GetAdvertisementsParams) ([]GetAdvertisementsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAdvertisements,
+		arg.Limit,
+		arg.Offset,
+		arg.MinPrice,
+		arg.MaxPrice,
+		arg.OrderBy,
+		arg.OrderDir,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAdvertisementsRow
+	for rows.Next() {
+		var i GetAdvertisementsRow
+		if err := rows.Scan(
+			&i.Title,
+			&i.Description,
+			&i.ImageAddress,
+			&i.Price,
+			&i.UserID,
+			&i.AuthorLogin,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

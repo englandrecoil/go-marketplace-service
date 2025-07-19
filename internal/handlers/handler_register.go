@@ -20,9 +20,11 @@ var (
 	ErrInvalidLoginFormat = errors.New("invalid format of login")
 )
 
-const minEntropyBits = 60
-const minLoginLength = 5
-const maxLoginLength = 32
+const (
+	minEntropyBits = 60
+	minLoginLength = 5
+	maxLoginLength = 32
+)
 
 type ApiConfig struct {
 	Conn   *sql.DB
