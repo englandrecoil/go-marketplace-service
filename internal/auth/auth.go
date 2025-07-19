@@ -13,9 +13,7 @@ import (
 
 type TokenType string
 
-const (
-	TokenTypeAccess TokenType = "auth-service"
-)
+const TokenTypeAccess TokenType = "auth-service"
 
 var (
 	ErrMissingAuthorizationHeader       = errors.New("missing authorization header")

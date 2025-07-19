@@ -9,6 +9,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/englandrecoil/go-marketplace-service/internal/auth"
+	"github.com/englandrecoil/go-marketplace-service/internal/constants"
 	"github.com/englandrecoil/go-marketplace-service/internal/database"
 	"github.com/englandrecoil/go-marketplace-service/internal/dto"
 	"github.com/gin-gonic/gin"
@@ -18,16 +19,6 @@ var (
 	ErrInvalidLengthTitle       = errors.New("invalid length of title")
 	ErrInvalidLengthDescription = errors.New("invalid length of description")
 	ErrInvalidPrice             = errors.New("incorrect price")
-)
-
-const (
-	minTitleLength = 1
-	maxTitleLength = 50
-	minDescLength  = 10
-	maxDescLength  = 750
-	minPrice       = 0
-	maxPrice       = 99999999
-	maxImageSize   = 10 * 1024 * 1024
 )
 
 // HandlerCreateAd godoc
@@ -106,13 +97,13 @@ func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 }
 
 func validateAdParams(title, description, imageUrl string, price int) error {
-	if utf8.RuneCountInString(title) < minTitleLength || utf8.RuneCountInString(title) > maxTitleLength {
+	if utf8.RuneCountInString(title) < constants.MinTitleLength || utf8.RuneCountInString(title) > constants.MaxTitleLength {
 		return ErrInvalidLengthTitle
 	}
-	if utf8.RuneCountInString(description) < minDescLength || utf8.RuneCountInString(description) > maxDescLength {
+	if utf8.RuneCountInString(description) < constants.MinDescLength || utf8.RuneCountInString(description) > constants.MaxDescLength {
 		return ErrInvalidLengthDescription
 	}
-	if price < minPrice || price > maxPrice {
+	if price < constants.MinPrice || price > constants.MaxPrice {
 		return ErrInvalidPrice
 	}
 	if err := validateImage(imageUrl); err != nil {
@@ -122,7 +113,7 @@ func validateAdParams(title, description, imageUrl string, price int) error {
 }
 
 func validateImage(imageUrl string) error {
-	if _, err := url.Parse(imageUrl); err != nil {
+	if _, err := url.ParseRequestURI(imageUrl); err != nil {
 		return err
 	}
 
@@ -141,7 +132,7 @@ func validateImage(imageUrl string) error {
 	if imageType != "image/jpeg" && imageType != "image/jpg" && imageType != "image/png" {
 		return errors.New("invalid image format")
 	}
-	if res.ContentLength > maxImageSize {
+	if res.ContentLength > constants.MaxImageSize {
 		return errors.New("image size is too big")
 	}
 	return nil

@@ -2,14 +2,12 @@ package handlers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/englandrecoil/go-marketplace-service/internal/auth"
+	"github.com/englandrecoil/go-marketplace-service/internal/constants"
 	"github.com/englandrecoil/go-marketplace-service/internal/dto"
 	"github.com/gin-gonic/gin"
 )
-
-const tokenExpirationTime time.Duration = time.Minute * 15
 
 // HandlerAuth godoc
 //
@@ -42,7 +40,7 @@ func (cfg *ApiConfig) HandlerAuth(c *gin.Context) {
 	}
 
 	// make JWT and send it to user
-	token, err := auth.MakeJWT(dbUser.ID, cfg.Secret, tokenExpirationTime)
+	token, err := auth.MakeJWT(dbUser.ID, cfg.Secret, constants.TokenExpirationTime)
 	if err != nil {
 		dto.ResponseWithError(c, http.StatusInternalServerError, "internal server error", err)
 		return

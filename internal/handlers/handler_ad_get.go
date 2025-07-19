@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/englandrecoil/go-marketplace-service/internal/auth"
+	"github.com/englandrecoil/go-marketplace-service/internal/constants"
 	"github.com/englandrecoil/go-marketplace-service/internal/database"
 	"github.com/englandrecoil/go-marketplace-service/internal/dto"
 	"github.com/gin-gonic/gin"
@@ -74,12 +75,16 @@ func (cfg *ApiConfig) HandlerGetAds(c *gin.Context) {
 		query.Order = "desc"
 	}
 	if query.MinPrice == nil {
-		defaultMinPrice := minPrice
+		defaultMinPrice := constants.MinPrice
 		query.MinPrice = &defaultMinPrice
 	}
 	if query.MaxPrice == nil {
-		defaultMaxPrice := maxPrice
+		defaultMaxPrice := constants.MaxPrice
 		query.MaxPrice = &defaultMaxPrice
+	}
+	if *query.MinPrice > *query.MaxPrice {
+		dto.ResponseWithError(c, http.StatusBadRequest, "min_price cannot be greater than max_price", nil)
+		return
 	}
 	offset := (query.Page - 1) * query.PageSize
 

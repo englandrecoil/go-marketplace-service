@@ -8,6 +8,7 @@ import (
 	"unicode"
 
 	"github.com/englandrecoil/go-marketplace-service/internal/auth"
+	"github.com/englandrecoil/go-marketplace-service/internal/constants"
 	"github.com/englandrecoil/go-marketplace-service/internal/database"
 	"github.com/englandrecoil/go-marketplace-service/internal/dto"
 	"github.com/gin-gonic/gin"
@@ -18,12 +19,6 @@ import (
 var (
 	ErrInvalidLoginLength = errors.New("invalid length of login")
 	ErrInvalidLoginFormat = errors.New("invalid format of login")
-)
-
-const (
-	minEntropyBits = 60
-	minLoginLength = 5
-	maxLoginLength = 32
 )
 
 type ApiConfig struct {
@@ -56,7 +51,7 @@ func (cfg *ApiConfig) HandlerRegister(c *gin.Context) {
 		return
 	}
 	// validate password
-	if err := passwordvalidator.Validate(inputCredentials.Password, minEntropyBits); err != nil {
+	if err := passwordvalidator.Validate(inputCredentials.Password, constants.MinEntropyBits); err != nil {
 		dto.ResponseWithError(c, http.StatusBadRequest, err.Error(), nil)
 		return
 	}
@@ -101,7 +96,7 @@ func (cfg *ApiConfig) HandlerRegister(c *gin.Context) {
 }
 
 func validateLogin(login string) error {
-	if len(login) < minLoginLength || len(login) > maxLoginLength {
+	if len(login) < constants.MinLoginLength || len(login) > constants.MaxLoginLength {
 		return ErrInvalidLoginLength
 	}
 	if !unicode.IsLetter(rune(login[0])) {
