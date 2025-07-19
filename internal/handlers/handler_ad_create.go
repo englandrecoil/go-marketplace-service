@@ -31,17 +31,19 @@ const (
 )
 
 // HandlerCreateAd godoc
-// @Summary     Создать новое объявление
-// @Description Создаёт новое объявление с заданными параметрами
-// @Accept      json
-// @Produce     json
-// @Security    BearerAuth
-// @Param       body body     dto.CreateAdsRequest  true "Параметры объявления"
-// @Success     201  {object} dto.CreateAdsResponse "Успешное создание объявления"
-// @Failure     400  {object} dto.ErrorResponse         "Неверный формат запроса"
-// @Failure     401  {object} dto.ErrorResponse         "Невалидный или просроченный токен-доступа"
-// @Failure     500  {object} dto.ErrorResponse         "Внутренняя ошибка сервера"
-// @Router      /api/ads [post]
+//
+//	@Summary		Создать новое объявление
+//	@Description	Создаёт новое объявление с заданными параметрами
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			Authorization	header		string					true	"Bearer токен"	example(Bearer J2bc3Cd0F...)
+//	@Param			body			body		dto.CreateAdsRequest	true	"Параметры объявления"
+//	@Success		201				{object}	dto.CreateAdsResponse	"Успешное создание объявления"
+//	@Failure		400				{object}	dto.ErrorResponse		"Неверный формат запроса"
+//	@Failure		401				{object}	dto.ErrorResponse		"Невалидный или просроченный токен-доступа"
+//	@Failure		500				{object}	dto.ErrorResponse		"Внутренняя ошибка сервера"
+//	@Router			/api/ads [post]
 func (cfg *ApiConfig) HandlerCreateAd(c *gin.Context) {
 	token, err := auth.GetBearerToken(c)
 	if err != nil {

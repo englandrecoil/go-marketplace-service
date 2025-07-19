@@ -33,15 +33,16 @@ type ApiConfig struct {
 }
 
 // HandlerRegister godoc
-// @Summary     Зарегистрировать нового пользователя
-// @Description Создаёт нового пользователя с заданным логином и паролем
-// @Accept      json
-// @Produce     json
-// @Param       credentials body     dto.CredentialsRequest true "Данные пользователя для входа"
-// @Success     201         {object} dto.RegisterResponse   "Успешная регистрация"
-// @Failure     400         {object} dto.ErrorResponse      "Неверный формат запроса, логин уже используется или пароль слишком слабый"
-// @Failure     500         {object} dto.ErrorResponse      "Внутренняя ошибка сервера"
-// @Router      /api/reg [post]
+//
+//	@Summary		Зарегистрировать нового пользователя
+//	@Description	Создаёт нового пользователя с заданным логином и паролем
+//	@Accept			json
+//	@Produce		json
+//	@Param			credentials	body		dto.CredentialsRequest	true	"Данные пользователя для входа"
+//	@Success		201			{object}	dto.RegisterResponse	"Успешная регистрация"
+//	@Failure		400			{object}	dto.ErrorResponse		"Неверный формат запроса, логин уже используется или пароль слишком слабый"
+//	@Failure		500			{object}	dto.ErrorResponse		"Внутренняя ошибка сервера"
+//	@Router			/api/reg [post]
 func (cfg *ApiConfig) HandlerRegister(c *gin.Context) {
 	inputCredentials := dto.CredentialsRequest{}
 	if err := c.BindJSON(&inputCredentials); err != nil {

@@ -13,7 +13,7 @@ type CreateAdsRequest struct {
 }
 
 type GetAdsQueryParamsRequest struct {
-	Page     int    `form:"page"`
+	Page     int    `form:"page" default:"1"`
 	PageSize int    `form:"page_size"`
 	MinPrice *int   `form:"min_price"`
 	MaxPrice *int   `form:"max_price"`

@@ -13,11 +13,12 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @Title       Go Marketplace Service
-// @version     1.0
-// @description API для маркетплейса
-// @host        localhost:8080
-// @BasePath    /
+//	@BasePath	/
+
+// @Title			Go Marketplace Service
+// @version		1.0
+// @description	API для маркетплейса
+// @host			localhost:8080
 func main() {
 	apiCfg := config.Init()
 	defer apiCfg.Conn.Close()

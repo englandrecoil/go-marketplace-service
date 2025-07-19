@@ -1,6 +1,11 @@
 basePath: /
 definitions:
-  dto.AdvertisementRequest:
+  dto.AuthResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  dto.CreateAdsRequest:
     properties:
       description:
         type: string
@@ -16,7 +21,7 @@ definitions:
     - price
     - title
     type: object
-  dto.AdvertisementResponse:
+  dto.CreateAdsResponse:
     properties:
       created_at:
         type: string
@@ -29,11 +34,6 @@ definitions:
       price:
         type: integer
       title:
-        type: string
-    type: object
-  dto.AuthResponse:
-    properties:
-      token:
         type: string
     type: object
   dto.CredentialsRequest:
@@ -49,6 +49,21 @@ definitions:
   dto.ErrorResponse:
     properties:
       error:
+        type: string
+    type: object
+  dto.GetAdsResponse:
+    properties:
+      author_login:
+        type: string
+      description:
+        type: string
+      image_address:
+        type: string
+      is_owner:
+        type: boolean
+      price:
+        type: integer
+      title:
         type: string
     type: object
   dto.RegisterResponse:
@@ -70,24 +85,100 @@ info:
   version: "1.0"
 paths:
   /api/ads:
+    get:
+      description: Позволяет получить объявления пользователей. Авторизованным пользователям
+        доступно получение параметра `is_owner`.
+      parameters:
+      - description: Bearer токен
+        example: Bearer J2bc3Cd0F...
+        in: header
+        name: Authorization
+        type: string
+      - default: 1
+        description: Номер страницы
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 25
+        description: Количество возвращаемых объявлений
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: Минимальная цена
+        in: query
+        minimum: 0
+        name: min_price
+        type: integer
+      - description: Максимальная цена
+        in: query
+        maximum: 99999999
+        name: max_price
+        type: integer
+      - default: created_at
+        description: Поле для сортировки
+        enum:
+        - price
+        - created_at
+        in: query
+        name: sort_by
+        type: string
+      - default: desc
+        description: Направление сортировки
+        enum:
+        - asc
+        - desc
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный ответ
+          schema:
+            items:
+              $ref: '#/definitions/dto.GetAdsResponse'
+            type: array
+        "400":
+          description: Неверные параметры запроса
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Невалидный или просроченный токен-доступа
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Получить объявления
     post:
       consumes:
       - application/json
       description: Создаёт новое объявление с заданными параметрами
       parameters:
+      - description: Bearer токен
+        example: Bearer J2bc3Cd0F...
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Параметры объявления
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/dto.AdvertisementRequest'
+          $ref: '#/definitions/dto.CreateAdsRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Успешное создание объявления
           schema:
-            $ref: '#/definitions/dto.AdvertisementResponse'
+            $ref: '#/definitions/dto.CreateAdsResponse'
         "400":
           description: Неверный формат запроса
           schema:

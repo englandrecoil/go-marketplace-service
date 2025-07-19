@@ -19,6 +19,23 @@ var (
 	ErrInvalidFormatOfOffset = errors.New("invalid format of offset")
 )
 
+// HandlerGetAds godoc
+//
+//	@Summary		Получить объявления
+//	@Description	Позволяет получить объявления пользователей. Авторизованным пользователям доступно получение параметра `is_owner`.
+//	@Produce		json
+//	@Param			Authorization	header		string				false	"Bearer токен"							example(Bearer J2bc3Cd0F...)
+//	@Param			page			query		int					false	"Номер страницы"						default(1)	minimum(1)
+//	@Param			page_size		query		int					false	"Количество возвращаемых объявлений"	default(25)	minimum(1)	maximum(100)
+//	@Param			min_price		query		int					false	"Минимальная цена"						minimum(0)
+//	@Param			max_price		query		int					false	"Максимальная цена"						maximum(99999999)
+//	@Param			sort_by			query		string				false	"Поле для сортировки"					default(created_at)	Enums(price, created_at)
+//	@Param			order			query		string				false	"Направление сортировки"				default(desc)		Enums(asc, desc)
+//	@Success		200				{array}		dto.GetAdsResponse	"Успешный ответ"
+//	@Failure		400				{object}	dto.ErrorResponse	"Неверные параметры запроса"
+//	@Failure		401				{object}	dto.ErrorResponse	"Невалидный или просроченный токен-доступа"
+//	@Failure		500				{object}	dto.ErrorResponse	"Внутренняя ошибка сервера"
+//	@Router			/api/ads [get]
 func (cfg *ApiConfig) HandlerGetAds(c *gin.Context) {
 	// if no auth header provided - simply exclude `is_owner` field from response in the future and do nothing lol
 	// if auth header is provided - validate it as usual

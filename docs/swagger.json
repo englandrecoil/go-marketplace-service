@@ -10,6 +10,104 @@
     "basePath": "/",
     "paths": {
         "/api/ads": {
+            "get": {
+                "description": "Позволяет получить объявления пользователей. Авторизованным пользователям доступно получение параметра `is_owner`.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Получить объявления",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "Bearer J2bc3Cd0F...",
+                        "description": "Bearer токен",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Номер страницы",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 25,
+                        "description": "Количество возвращаемых объявлений",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "Минимальная цена",
+                        "name": "min_price",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 99999999,
+                        "type": "integer",
+                        "description": "Максимальная цена",
+                        "name": "max_price",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "price",
+                            "created_at"
+                        ],
+                        "type": "string",
+                        "default": "created_at",
+                        "description": "Поле для сортировки",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "type": "string",
+                        "default": "desc",
+                        "description": "Направление сортировки",
+                        "name": "order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.GetAdsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Неверные параметры запроса",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Невалидный или просроченный токен-доступа",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -26,12 +124,20 @@
                 "summary": "Создать новое объявление",
                 "parameters": [
                     {
+                        "type": "string",
+                        "example": "Bearer J2bc3Cd0F...",
+                        "description": "Bearer токен",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Параметры объявления",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.AdvertisementRequest"
+                            "$ref": "#/definitions/dto.CreateAdsRequest"
                         }
                     }
                 ],
@@ -39,7 +145,7 @@
                     "201": {
                         "description": "Успешное создание объявления",
                         "schema": {
-                            "$ref": "#/definitions/dto.AdvertisementResponse"
+                            "$ref": "#/definitions/dto.CreateAdsResponse"
                         }
                     },
                     "400": {
@@ -157,7 +263,15 @@
         }
     },
     "definitions": {
-        "dto.AdvertisementRequest": {
+        "dto.AuthResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateAdsRequest": {
             "type": "object",
             "required": [
                 "description",
@@ -180,7 +294,7 @@
                 }
             }
         },
-        "dto.AdvertisementResponse": {
+        "dto.CreateAdsResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -199,14 +313,6 @@
                     "type": "integer"
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.AuthResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
                     "type": "string"
                 }
             }
@@ -230,6 +336,29 @@
             "type": "object",
             "properties": {
                 "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetAdsResponse": {
+            "type": "object",
+            "properties": {
+                "author_login": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image_address": {
+                    "type": "string"
+                },
+                "is_owner": {
+                    "type": "boolean"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "title": {
                     "type": "string"
                 }
             }

@@ -12,16 +12,17 @@ import (
 const tokenExpirationTime time.Duration = time.Minute * 15
 
 // HandlerAuth godoc
-// @Summary     Аутентифицировать пользователя
-// @Description Аутентифицирует пользователя по заданному логину и паролю и возвращает JWT
-// @Accept      json
-// @Produce     json
-// @Param       credentials body     dto.CredentialsRequest true "Данные пользователя для входа"
-// @Success     200         {object} dto.AuthResponse       "Успешная аутентификация"
-// @Failure     400         {object} dto.ErrorResponse      "Неверный формат запроса"
-// @Failure     401         {object} dto.ErrorResponse      "Неверный логин или пароль"
-// @Failure     500         {object} dto.ErrorResponse      "Внутренняя ошибка сервера"
-// @Router      /api/auth [post]
+//
+//	@Summary		Аутентифицировать пользователя
+//	@Description	Аутентифицирует пользователя по заданному логину и паролю и возвращает JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			credentials	body		dto.CredentialsRequest	true	"Данные пользователя для входа"
+//	@Success		200			{object}	dto.AuthResponse		"Успешная аутентификация"
+//	@Failure		400			{object}	dto.ErrorResponse		"Неверный формат запроса"
+//	@Failure		401			{object}	dto.ErrorResponse		"Неверный логин или пароль"
+//	@Failure		500			{object}	dto.ErrorResponse		"Внутренняя ошибка сервера"
+//	@Router			/api/auth [post]
 func (cfg *ApiConfig) HandlerAuth(c *gin.Context) {
 	inputCredentials := dto.CredentialsRequest{}
 	if err := c.BindJSON(&inputCredentials); err != nil {
