@@ -32,16 +32,3 @@ ORDER BY
   CASE WHEN sqlc.arg(order_by) = 'created_at' AND sqlc.arg(order_dir) = 'desc' THEN ads.created_at END DESC,
   ads.created_at DESC
 LIMIT $1 OFFSET $2;
-
--- SELECT ads.title, ads.description, ads.image_address, ads.price, user_id, users.login AS author_login
--- FROM advertisements as ads
--- JOIN users on users.id = ads.user_id
--- WHERE (sqlc.arg(min_price) IS NULL OR price >= sqlc.arg(min_price))
--- AND (sqlc.arg(max_price) IS NULL OR price <= sqlc.arg(max_price))
--- ORDER BY
--- CASE WHEN sqlc.arg(order_by)::text = 'price' AND sqlc.arg(order_dir)::text = 'asc' THEN price END ASC,
--- CASE WHEN sqlc.arg(order_by)::text = 'price' AND sqlc.arg(order_dir)::text = 'desc' THEN price END DESC,
--- CASE WHEN sqlc.arg(order_by)::text = 'created_at' AND sqlc.arg(order_dir)::text = 'asc' THEN created_at END ASC,
--- CASE WHEN sqlc.arg(order_by)::text = 'created_at' AND sqlc.arg(order_dir)::text = 'desc' THEN created_at END DESC,
--- ads.created_at DESC
--- LIMIT $1 OFFSET $2;
