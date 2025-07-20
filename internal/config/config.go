@@ -26,8 +26,14 @@ func Init() handlers.ApiConfig {
 	}
 	dbQueries := database.New(dbConn)
 
+	secret := os.Getenv("SECRET")
+	if secret == "" {
+		log.Fatal("SECRET must be set")
+	}
+
 	return handlers.ApiConfig{
-		Conn: dbConn,
-		DB:   dbQueries,
+		Conn:   dbConn,
+		DB:     dbQueries,
+		Secret: secret,
 	}
 }
